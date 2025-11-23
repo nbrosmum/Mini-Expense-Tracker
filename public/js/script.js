@@ -139,10 +139,14 @@ function renderList(filtered) {
 
     const rightWrap = document.createElement('div');
     rightWrap.style.display = 'flex';
-    rightWrap.style.alignItems = 'center';
-    rightWrap.innerHTML = `<div class="amount-badge">MYR ${Number(e.amount).toFixed(2)}</div>
-                           <button class="btn btn-sm btn-outline-warning ms-2" data-id="${String(e.id)}" title="Edit">Edit</button>
-                           <button class="btn btn-sm btn-outline-danger ms-2" data-id="${String(e.id)}" title="Delete">Delete</button>`;
+    rightWrap.style.flexDirection = 'column';
+    rightWrap.style.gap = '8px';
+    rightWrap.style.alignItems = 'stretch';
+    rightWrap.innerHTML = `<div class="amount-badge" style="margin-bottom: 4px;">MYR ${Number(e.amount).toFixed(2)}</div>
+                           <div style="display: flex; gap: 6px;">
+                             <button class="btn btn-sm btn-outline-warning flex-grow-1" data-id="${String(e.id)}" title="Edit">Edit</button>
+                             <button class="btn btn-sm btn-outline-danger flex-grow-1" data-id="${String(e.id)}" title="Delete">Delete</button>
+                           </div>`;
 
     item.appendChild(leftWrap);
     item.appendChild(rightWrap);
@@ -167,11 +171,20 @@ function renderChart(yearNumber) {
   const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const data = getMonthlyTotals(yearNumber);
   const bgColors = buildBarColors(data);
+  
+  // Detect if mobile
+  const isMobile = window.innerWidth < 576;
+  const barThickness = isMobile ? 14 : 22;
+  const maxRotation = isMobile ? 45 : 0;
+  const fontSize = isMobile ? 10 : 12;
 
   if (chart) {
     chart.data.datasets[0].data = data;
     chart.data.datasets[0].backgroundColor = bgColors;
+    chart.data.datasets[0].barThickness = barThickness;
     chart.options.plugins.title.text = `Monthly Total (MYR) - ${yearNumber}`;
+    chart.options.scales.x.ticks.maxRotation = maxRotation;
+    chart.options.scales.x.ticks.fontSize = fontSize;
     chart.update();
     return;
   }
@@ -185,13 +198,27 @@ function renderChart(yearNumber) {
         data,
         backgroundColor: bgColors,
         borderRadius: 12,
-        barThickness: 22
+        barThickness: barThickness
       }]
     },
     options: {
       responsive: true,
-      plugins: { legend: { display: false }, title: { display: true, text: `Monthly Total (MYR) - ${yearNumber}`, color: '#3a2a5a' } },
-      scales: { y: { beginAtZero: true }, x: { ticks: { color: '#6b4b8a' } } }
+      maintainAspectRatio: true,
+      plugins: { 
+        legend: { display: false }, 
+        title: { display: true, text: `Monthly Total (MYR) - ${yearNumber}`, color: '#3a2a5a', font: { size: isMobile ? 12 : 14 } } 
+      },
+      scales: { 
+        y: { beginAtZero: true, ticks: { font: { size: fontSize } } }, 
+        x: { 
+          ticks: { 
+            color: '#6b4b8a',
+            font: { size: fontSize },
+            maxRotation: maxRotation,
+            minRotation: maxRotation
+          }
+        } 
+      }
     }
   });
 }
@@ -299,6 +326,20 @@ filterYearSelect.addEventListener('change', () => {
   const year = Number(filterYearSelect.value);
   renderList(getFilteredByYear(year));
   renderChart(year);
+});
+
+// handle window resize to update chart for mobile/desktop
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    if (chart) {
+      chart.destroy();
+      chart = null;
+      const year = Number(filterYearSelect.value) || new Date().getFullYear();
+      renderChart(year);
+    }
+  }, 250);
 });
 
 // init
