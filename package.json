@@ -1,0 +1,11 @@
+{
+  "name": "mini-expense-tracker",
+  "version": "1.0.0",
+  "description": "A simple responsive Expense Tracker built with HTML, CSS, JavaScript, and Bootstrap. Users can add daily expenses, filter them by year, and view a monthly spending diagram. Includes form validation, dynamic expense listing, and a clean UI.",
+  "scripts": {
+    "start": "live-server public --port=3000"
+  },
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}
