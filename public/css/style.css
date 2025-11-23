@@ -38,9 +38,6 @@ body {
   justify-content: center;   /* center horizontally */
   align-items: center;
 }
-.control-row .btn-add {
-  margin: 0 auto;
-}
 .btn-add {
   background: var(--accent-dark);
   color: #fff;
@@ -75,8 +72,7 @@ body {
 .form-panel .form-label { color: rgba(0,0,0,0.6); font-weight:700; }
 
 /* stacked inputs with larger spacing */
-.form-panel input.form-control,
-.form-panel select.form-select {
+.form-panel input.form-control {
   background: #fff;
   color: #222;
   border-radius: 8px;
@@ -93,9 +89,8 @@ body {
   border-radius: 6px;
   padding: 6px 10px;
   min-width: 110px;          /* allow space for arrow */
-  appearance: auto;
-  -webkit-appearance: menulist-button; /* restore native on webkit */
-  background-image: linear-gradient(45deg, transparent 50%, transparent 50%); /* no custom graphic */
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 /* Chart, list and footer same as before */
