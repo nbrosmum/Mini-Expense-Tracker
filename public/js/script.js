@@ -28,7 +28,13 @@ function saveToStorage() {
   localStorage.setItem(LS_KEY, JSON.stringify(expenses));
 }
 function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
-function formatDate(iso) { return new Date(iso).toLocaleDateString(); }
+function formatDate(iso) { 
+  const d = new Date(iso);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
 
 // show/hide top form and swap Add button visibility
 function openTopForm() {
