@@ -15,6 +15,8 @@ const submitBtn = document.getElementById('submit-btn');
 const filterYearSelect = document.getElementById('filter-year');
 const expensesList = document.getElementById('expenses-list');
 const emptyState = document.getElementById('empty-state');
+const totalYearExpense = document.getElementById('total-year-expense');
+const clearAllBtn = document.getElementById('clear-all-btn');
 
 let expenses = [];
 let chart = null;
@@ -169,6 +171,17 @@ function getMonthlyTotals(yearNumber) {
   });
   return months;
 }
+
+function getTotalYearExpense(yearNumber) {
+  return expenses
+    .filter(e => new Date(e.date).getFullYear() === Number(yearNumber))
+    .reduce((sum, e) => sum + Number(e.amount), 0);
+}
+
+function updateTotalYearExpense(yearNumber) {
+  const total = getTotalYearExpense(yearNumber);
+  totalYearExpense.textContent = `MYR ${total.toFixed(2)}`;
+}
 function buildBarColors(dataArr) {
   return dataArr.map(v => v > 0 ? 'rgba(109,42,165,0.95)' : 'rgba(217,195,245,0.6)');
 }
@@ -236,6 +249,7 @@ function refreshUI() {
   const filtered = getFilteredByYear(year);
   renderList(filtered);
   renderChart(year);
+  updateTotalYearExpense(year);
 }
 
 // add expense submit
@@ -332,6 +346,21 @@ filterYearSelect.addEventListener('change', () => {
   const year = Number(filterYearSelect.value);
   renderList(getFilteredByYear(year));
   renderChart(year);
+  updateTotalYearExpense(year);
+});
+
+// clear all data
+clearAllBtn.addEventListener('click', () => {
+  if (!confirm('Are you sure you want to delete ALL expenses? This cannot be undone.')) return;
+  if (!confirm('This will permanently delete all data from localStorage. Continue?')) return;
+
+  expenses = [];
+  saveToStorage();
+  editingId = null;
+  form.reset();
+  closeTopForm();
+  refreshUI();
+  alert('All data has been cleared!');
 });
 
 // handle window resize to update chart for mobile/desktop
