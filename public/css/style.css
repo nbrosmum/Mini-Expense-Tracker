@@ -132,6 +132,8 @@ body {
     flex-shrink: 0; 
 }
 .amount-badge { background: var(--accent); color: #fff; padding: 8px 12px; border-radius: 16px; font-weight: 700; min-width: 100px; text-align: center; }
+.btn-outline-warning { border-color: rgba(255,255,255,0.08); color: #fff; }
+.btn-outline-warning:hover { background: rgba(255,182,193,0.2); }
 .btn-outline-danger { border-color: rgba(255,255,255,0.08); color: #fff; }
 .btn-outline-danger:hover { background: rgba(255,255,255,0.03); }
 #empty-state { color: #fff; margin-top: 12px; text-align: center; font-weight: 700; }

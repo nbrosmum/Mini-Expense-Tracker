@@ -18,6 +18,7 @@ const emptyState = document.getElementById('empty-state');
 
 let expenses = [];
 let chart = null;
+let editingId = null;
 
 function loadFromStorage() {
   const raw = localStorage.getItem(LS_KEY);
@@ -44,6 +45,8 @@ function closeTopForm() {
   formPanel.style.display = 'none';
   formPanel.setAttribute('aria-hidden', 'true');
   form.reset();
+  editingId = null;
+  submitBtn.textContent = 'Add Expense';
 }
 
 // validate form and update submit button state
@@ -64,6 +67,20 @@ resetBtn.addEventListener('click', closeTopForm);
 titleInput.addEventListener('input', validateForm);
 amountInput.addEventListener('input', validateForm);
 dateInput.addEventListener('change', validateForm);
+
+// edit expense function
+function editExpense(id) {
+  const expense = expenses.find(e => String(e.id) === String(id));
+  if (!expense) return;
+  
+  editingId = id;
+  titleInput.value = expense.title;
+  amountInput.value = expense.amount;
+  dateInput.value = expense.date;
+  submitBtn.textContent = 'Update Expense';
+  
+  openTopForm();
+}
 
 // year dropdown builder
 function renderYearOptions() {
@@ -124,7 +141,8 @@ function renderList(filtered) {
     rightWrap.style.display = 'flex';
     rightWrap.style.alignItems = 'center';
     rightWrap.innerHTML = `<div class="amount-badge">MYR ${Number(e.amount).toFixed(2)}</div>
-                           <button class="btn btn-sm btn-outline-danger ms-3" data-id="${String(e.id)}" title="Delete">Delete</button>`;
+                           <button class="btn btn-sm btn-outline-warning ms-2" data-id="${String(e.id)}" title="Edit">Edit</button>
+                           <button class="btn btn-sm btn-outline-danger ms-2" data-id="${String(e.id)}" title="Delete">Delete</button>`;
 
     item.appendChild(leftWrap);
     item.appendChild(rightWrap);
@@ -219,21 +237,35 @@ form.addEventListener('submit', ev => {
     return;
   }
 
-  const newExpense = {
-    id: String(uid()),
-    title: titleInput.value.trim(),
-    amount: Number(amountInput.value).toFixed(2),
-    date: dateInput.value
-  };
+  if (editingId) {
+    // Update existing expense
+    const expense = expenses.find(e => String(e.id) === String(editingId));
+    if (expense) {
+      expense.title = titleInput.value.trim();
+      expense.amount = Number(amountInput.value).toFixed(2);
+      expense.date = dateInput.value;
+    }
+    editingId = null;
+  } else {
+    // Add new expense
+    const newExpense = {
+      id: String(uid()),
+      title: titleInput.value.trim(),
+      amount: Number(amountInput.value).toFixed(2),
+      date: dateInput.value
+    };
+    expenses.push(newExpense);
+  }
 
-  expenses.push(newExpense);
   saveToStorage();
 
   // keep top form visible; select new year immediately
   renderYearOptions();
-  filterYearSelect.value = String(new Date(newExpense.date).getFullYear());
+  const newYear = new Date(dateInput.value).getFullYear();
+  filterYearSelect.value = String(newYear);
 
   form.reset();
+  submitBtn.textContent = 'Add Expense';
   refreshUI();
 });
 
@@ -243,6 +275,13 @@ expensesList.addEventListener('click', ev => {
   if (!btn) return;
   const id = btn.getAttribute('data-id');
   if (!id) return;
+  
+  // Check if it's an edit or delete button
+  if (btn.classList.contains('btn-outline-warning')) {
+    editExpense(id);
+    return;
+  }
+  
   if (!confirm('Delete this expense?')) return;
 
   const beforeLen = expenses.length;
