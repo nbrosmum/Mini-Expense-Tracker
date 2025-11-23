@@ -46,7 +46,6 @@ body {
   display: none !important;
 }
 
-/* Control row below title: center button inside the page container */
 .control-row {
   margin: 8px 0 6px;
   padding: 0 12px;
@@ -99,7 +98,6 @@ body {
   }
 }
 
-/* Top-form container */
 .top-form-container {
   margin-bottom: 18px;
 }
@@ -115,7 +113,7 @@ body {
   box-shadow: none;
 }
 
-/* form-panel visual */
+
 .form-panel {
   background: linear-gradient(180deg, var(--lavender), #9b7be0);
   border-radius: 12px;
@@ -130,13 +128,12 @@ body {
   }
 }
 
-/* labels inside lavender panel darker for readability */
 .form-panel .form-label {
   color: rgba(0, 0, 0, 0.6);
   font-weight: 700;
 }
 
-/* stacked inputs with larger spacing */
+
 .form-panel input.form-control {
   background: #fff;
   color: #222;
@@ -153,7 +150,6 @@ body {
   }
 }
 
-/* restore native select arrow */
 #filter-year {
   background-color: #fff;
   color: #000;
@@ -164,7 +160,6 @@ body {
   -webkit-appearance: none;
 }
 
-/* Chart, list and footer */
 .page-container {
   max-width: 1100px;
   margin: 0 auto 40px;
@@ -293,7 +288,6 @@ body {
   color: #fff;
 }
 
-/* small screens: keep stacked */
 @media (max-width: 575px) {
   .page-container {
     padding-left: 12px;

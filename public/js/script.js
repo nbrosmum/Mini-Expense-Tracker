@@ -1,8 +1,5 @@
-// public/js/script.js
-// Mini Expense Tracker - localStorage + chart + top-form toggle + delete fix
-const LS_KEY = 'expenses_v1';
 
-// DOM
+const LS_KEY = 'expenses_v1';
 const showAddBtn = document.getElementById('show-add-btn');
 const topFormContainer = document.getElementById('top-form');
 const formPanel = document.getElementById('form-panel');
@@ -38,7 +35,6 @@ function formatDate(iso) {
   return `${day}/${month}/${year}`;
 }
 
-// show/hide top form and swap Add button visibility
 function openTopForm() {
   topFormContainer.classList.remove('hidden');
   showAddBtn.style.display = 'none';
@@ -57,7 +53,6 @@ function closeTopForm() {
   submitBtn.textContent = 'Add Expense';
 }
 
-// validate form and update submit button state
 function validateForm() {
   const isTitleValid = titleInput.value.trim().length > 0;
   const isAmountValid = amountInput.value && Number(amountInput.value) > 0;
@@ -67,11 +62,9 @@ function validateForm() {
   submitBtn.disabled = !isFormValid;
 }
 
-// wire Add button and Cancel inside form
 showAddBtn.addEventListener('click', openTopForm);
 resetBtn.addEventListener('click', closeTopForm);
 
-// listen for input changes and validate
 titleInput.addEventListener('input', validateForm);
 amountInput.addEventListener('input', validateForm);
 dateInput.addEventListener('change', validateForm);
@@ -306,7 +299,6 @@ form.addEventListener('submit', ev => {
 
   saveToStorage();
 
-  // keep top form visible; select new year immediately
   renderYearOptions();
   const newYear = new Date(dateInput.value).getFullYear();
   filterYearSelect.value = String(newYear);

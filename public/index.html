@@ -10,27 +10,22 @@
 </head>
 
 <body>
-
-  <!-- Header title -->
   <header class="app-header">
     <div class="container header-inner text-center">
       <h1 class="app-title">Mini Expense Tracker</h1>
     </div>
   </header>
 
-  <!-- Control row: Add button centered -->
   <div class="control-row">
     <button id="show-add-btn" class="btn btn-add">Add New Expense</button>
   </div>
 
-  <!-- Top-form (hidden until Add clicked). Full-width lavender panel under title -->
   <div id="top-form" class="top-form-container hidden" aria-hidden="true">
     <div class="container page-container">
       <div class="row justify-content-center gx-4">
         <div class="col-12 col-lg-8">
           <div class="card form-full-card">
             <div id="form-panel" class="card-body form-panel">
-              <!-- stacked column layout -->
               <form id="expense-form" novalidate class="row g-3">
             <div class="col-12">
               <label class="form-label">Title</label>
@@ -59,7 +54,6 @@
     </div>
   </div>
 
-  <!-- Main app area (single centered column) -->
   <main class="container page-container">
     <div class="row justify-content-center gx-4">
       <div class="col-12 col-lg-8">
@@ -97,7 +91,6 @@
     </div>
   </footer>
 
-  <!-- JS -->
   <script src="js/script.js"></script>
 </body>
 </html>
