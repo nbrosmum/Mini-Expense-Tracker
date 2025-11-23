@@ -25,11 +25,13 @@
 
   <!-- Top-form (hidden until Add clicked). Full-width lavender panel under title -->
   <div id="top-form" class="top-form-container hidden" aria-hidden="true">
-    <div class="container form-container-inner">
-      <div class="card form-full-card">
-        <div id="form-panel" class="card-body form-panel">
-          <!-- stacked column layout -->
-          <form id="expense-form" novalidate class="row g-3">
+    <div class="container page-container">
+      <div class="row justify-content-center gx-4">
+        <div class="col-12 col-lg-8">
+          <div class="card form-full-card">
+            <div id="form-panel" class="card-body form-panel">
+              <!-- stacked column layout -->
+              <form id="expense-form" novalidate class="row g-3">
             <div class="col-12">
               <label class="form-label">Title</label>
               <input id="title" type="text" class="form-control" />
@@ -47,9 +49,11 @@
 
             <div class="col-12 d-flex justify-content-end gap-3 mt-2">
               <button type="button" id="reset-btn" class="btn btn-cancel">Cancel</button>
-              <button type="submit" class="btn btn-add">Add Expense</button>
+              <button type="submit" id="submit-btn" class="btn btn-add">Add Expense</button>
             </div>
           </form>
+        </div>
+      </div>
         </div>
       </div>
     </div>

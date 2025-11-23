@@ -11,6 +11,7 @@ const titleInput = document.getElementById('title');
 const amountInput = document.getElementById('amount');
 const dateInput = document.getElementById('date');
 const resetBtn = document.getElementById('reset-btn');
+const submitBtn = document.getElementById('submit-btn');
 const filterYearSelect = document.getElementById('filter-year');
 const expensesList = document.getElementById('expenses-list');
 const emptyState = document.getElementById('empty-state');
@@ -35,6 +36,7 @@ function openTopForm() {
   formPanel.style.display = 'block';
   formPanel.setAttribute('aria-hidden', 'false');
   setTimeout(()=> titleInput && titleInput.focus(), 160);
+  validateForm();
 }
 function closeTopForm() {
   topFormContainer.classList.add('hidden');
@@ -44,9 +46,24 @@ function closeTopForm() {
   form.reset();
 }
 
+// validate form and update submit button state
+function validateForm() {
+  const isTitleValid = titleInput.value.trim().length > 0;
+  const isAmountValid = amountInput.value && Number(amountInput.value) > 0;
+  const isDateValid = dateInput.value.length > 0;
+  const isFormValid = isTitleValid && isAmountValid && isDateValid;
+  
+  submitBtn.disabled = !isFormValid;
+}
+
 // wire Add button and Cancel inside form
 showAddBtn.addEventListener('click', openTopForm);
 resetBtn.addEventListener('click', closeTopForm);
+
+// listen for input changes and validate
+titleInput.addEventListener('input', validateForm);
+amountInput.addEventListener('input', validateForm);
+dateInput.addEventListener('change', validateForm);
 
 // year dropdown builder
 function renderYearOptions() {
@@ -173,9 +190,34 @@ function refreshUI() {
 // add expense submit
 form.addEventListener('submit', ev => {
   ev.preventDefault();
-  if (!titleInput.value.trim()) { titleInput.classList.add('is-invalid'); return; } else titleInput.classList.remove('is-invalid');
-  if (!amountInput.value || Number(amountInput.value) <= 0) { amountInput.classList.add('is-invalid'); return; } else amountInput.classList.remove('is-invalid');
-  if (!dateInput.value) { dateInput.classList.add('is-invalid'); return; } else dateInput.classList.remove('is-invalid');
+  
+  let errorMsg = '';
+  
+  if (!titleInput.value.trim()) {
+    titleInput.classList.add('is-invalid');
+    errorMsg += 'Title is required.\n';
+  } else {
+    titleInput.classList.remove('is-invalid');
+  }
+  
+  if (!amountInput.value || Number(amountInput.value) <= 0) {
+    amountInput.classList.add('is-invalid');
+    errorMsg += 'Amount must be greater than 0.\n';
+  } else {
+    amountInput.classList.remove('is-invalid');
+  }
+  
+  if (!dateInput.value) {
+    dateInput.classList.add('is-invalid');
+    errorMsg += 'Date is required.\n';
+  } else {
+    dateInput.classList.remove('is-invalid');
+  }
+  
+  if (errorMsg) {
+    alert('Please Follow the requirement\n\n' + errorMsg);
+    return;
+  }
 
   const newExpense = {
     id: String(uid()),
