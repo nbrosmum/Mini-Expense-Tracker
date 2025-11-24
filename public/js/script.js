@@ -19,14 +19,20 @@ let expenses = [];
 let chart = null;
 let editingId = null;
 
+// load from localStorage
 function loadFromStorage() {
   const raw = localStorage.getItem(LS_KEY);
   expenses = raw ? JSON.parse(raw) : [];
 }
+// save to localStorage
 function saveToStorage() {
   localStorage.setItem(LS_KEY, JSON.stringify(expenses));
 }
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+// utility functions
+function uid() { 
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+}
+// format date to DD/MM/YYYY
 function formatDate(iso) { 
   const d = new Date(iso);
   const day = String(d.getDate()).padStart(2, '0');
@@ -34,7 +40,7 @@ function formatDate(iso) {
   const year = d.getFullYear();
   return `${day}/${month}/${year}`;
 }
-
+// form open and validation
 function openTopForm() {
   topFormContainer.classList.remove('hidden');
   showAddBtn.style.display = 'none';
@@ -43,6 +49,7 @@ function openTopForm() {
   setTimeout(()=> titleInput && titleInput.focus(), 160);
   validateForm();
 }
+// close form
 function closeTopForm() {
   topFormContainer.classList.add('hidden');
   showAddBtn.style.display = 'inline-block';
@@ -52,7 +59,7 @@ function closeTopForm() {
   editingId = null;
   submitBtn.textContent = 'Add Expense';
 }
-
+// form validation
 function validateForm() {
   const isTitleValid = titleInput.value.trim().length > 0;
   const isAmountValid = amountInput.value && Number(amountInput.value) > 0;
@@ -62,9 +69,9 @@ function validateForm() {
   submitBtn.disabled = !isFormValid;
 }
 
+// event listeners
 showAddBtn.addEventListener('click', openTopForm);
 resetBtn.addEventListener('click', closeTopForm);
-
 titleInput.addEventListener('input', validateForm);
 amountInput.addEventListener('input', validateForm);
 dateInput.addEventListener('change', validateForm);
@@ -105,6 +112,8 @@ function renderYearOptions() {
 function getFilteredByYear(yearNumber) {
   return expenses.filter(e => new Date(e.date).getFullYear() === Number(yearNumber));
 }
+
+// render expense list
 function renderList(filtered) {
   expensesList.innerHTML = '';
   if (!filtered || filtered.length === 0) {
@@ -164,20 +173,23 @@ function getMonthlyTotals(yearNumber) {
   });
   return months;
 }
-
+// total year expense
 function getTotalYearExpense(yearNumber) {
   return expenses
     .filter(e => new Date(e.date).getFullYear() === Number(yearNumber))
     .reduce((sum, e) => sum + Number(e.amount), 0);
 }
 
+// update total year expense display
 function updateTotalYearExpense(yearNumber) {
   const total = getTotalYearExpense(yearNumber);
   totalYearExpense.textContent = `MYR ${total.toFixed(2)}`;
 }
+// render chart
 function buildBarColors(dataArr) {
   return dataArr.map(v => v > 0 ? 'rgba(109,42,165,0.95)' : 'rgba(217,195,245,0.6)');
 }
+// render chart
 function renderChart(yearNumber) {
   const ctx = document.getElementById('monthlyChart').getContext('2d');
   const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
