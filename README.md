@@ -7,14 +7,11 @@ A responsive web-based expense tracker application that allows users to manage t
 -  **Add, Edit, Delete Expenses** — Manage your expenses with full CRUD operations
 -  **Year-based Filtering** — Filter and view expenses by year
 -  **Monthly Chart Visualization** — Interactive bar chart showing monthly spending totals
--  **Total Year Expense** — Quick overview of total spending for selected year
 -  **Form Validation** — Real-time validation with disabled submit button until form is complete
 -  **Local Storage Persistence** — All data is saved in browser's localStorage
 -  **Responsive Design** — Fully mobile-responsive using Bootstrap 5
 -  **Clear All Data** — One-click option to clear all expenses and free up localStorage
--  **Date Formatting** — Display dates in dd/mm/yyyy format
--  **Dynamic Date Display** — Expense items show month, year, and day in a visual box
--  **Adaptive Chart** — Chart automatically adjusts for mobile and desktop views
+
 
 ## Tech Stack
 
@@ -100,6 +97,7 @@ Mini-Expense-Tracker/
 │   ├── index.html          # Main HTML file
 │   ├── css/
 │   │   └── style.css       # Custom CSS with responsive design
+│   ├── assets              # the media file use in the project (image,audio,.....etc)
 │   └── js/
 │       └── script.js       # Main application logic
 ├── package.json            # Project dependencies
